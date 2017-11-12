@@ -15,17 +15,17 @@ APPS_DIR = ROOT_DIR.path('nomadgram')
 # Load operating system environment variables and then prepare to use them
 env = environ.Env()
 
-# .env file, should load only in development environment
+# env.example file, should load only in development environment
 READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=False)
 
 if READ_DOT_ENV_FILE:
-    # Operating System Environment variables have precedence over variables defined in the .env file,
-    # that is to say variables from the .env files will only be used if not defined
+    # Operating System Environment variables have precedence over variables defined in the env.example file,
+    # that is to say variables from the env.example files will only be used if not defined
     # as environment variables.
-    env_file = str(ROOT_DIR.path('.env'))
+    env_file = str(ROOT_DIR.path('env.example'))
     print('Loading : {}'.format(env_file))
     env.read_env(env_file)
-    print('The .env file has been loaded. See base.py for more information')
+    print('The env.example file has been loaded. See base.py for more information')
 
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -39,13 +39,12 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 
     # Useful template tags:
-    # 'django.contrib.humanize',
+    'django.contrib.humanize',
 
     # Admin
     'django.contrib.admin',
 ]
 THIRD_PARTY_APPS = [
-    'crispy_forms',  # Form layouts
     'allauth',  # registration
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
@@ -56,6 +55,7 @@ LOCAL_APPS = [
     # custom users app
     'nomadgram.users.apps.UsersConfig',
     # Your stuff: custom apps go here
+    'nomadgram.images.apps.ImagesConfig',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -174,10 +174,6 @@ TEMPLATES = [
         },
     },
 ]
-
-# See: http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 # STATIC FILE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
@@ -251,8 +247,8 @@ AUTHENTICATION_BACKENDS = [
 
 # Some really nice defaults
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ACCOUNT_ALLOW_REGISTRATION = env.bool('DJANGO_ACCOUNT_ALLOW_REGISTRATION', True)
 ACCOUNT_ADAPTER = 'nomadgram.users.adapters.AccountAdapter'
